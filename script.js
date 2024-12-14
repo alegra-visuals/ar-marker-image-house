@@ -5,6 +5,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {ARButton} from 'three/addons/webxr/ARButton.js'
 // import trackImage from '../images/track-image.jpeg'
+
 if ('xr' in navigator) {
   navigator.xr.isSessionSupported('immersive-vr').then(supported => {
     if (supported) {
@@ -23,6 +24,7 @@ if ('xr' in navigator) {
   alert("Your browser doesn't support WebXR. Please enable it in chrome://flags.");
 }
 
+
 let scene =new THREE.Scene();
 let camera =new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,0.1,1000);
 camera.position.z = 5;
@@ -30,6 +32,7 @@ let app = document.getElementById("app");
 let renderer =new THREE.WebGLRenderer();
 renderer.xr.enabled = true;
 renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.setClearColor("#182750")
 app.appendChild(renderer.domElement);
 let controls =new OrbitControls(camera,renderer.domElement);
 
@@ -42,9 +45,9 @@ let directionalLight = new THREE.DirectionalLight(0xffffff,1);
 directionalLight.position.set(3,3,3);
 scene.add(directionalLight);
 
-let directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight,2);
+// let directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight,2);
 
-scene.add(directionalLightHelper);
+// scene.add(directionalLightHelper);
 
 //create bitmap image
 // let TrackImageBitMap = await createImageBitmap(trackImage);
@@ -56,7 +59,7 @@ let houseModel;
 loader.load("house.glb",(gltf)=>{
     houseModel = gltf.scene;
     houseModel.scale.set(0.2, 0.2, 0.2);
-    houseModel.position.set(0, -2, -5);
+    houseModel.position.set(0, 0, 0);
     houseModel.matrixAutoUpdate = true;
     // houseModel.visible = false;
     scene.add(houseModel);
@@ -148,20 +151,23 @@ function animate(){
 }
 
 // Add session event listeners
-// renderer.xr.addEventListener("sessionstart", () => {
-//   console.log('AR session started');
-//   if (houseModel) {
-//     houseModel.visible = false;
-//   }
-// });
+renderer.xr.addEventListener("sessionstart", () => {
+  console.log('AR session started');
+  document.getElementById("logo_container").style.display = "none";
+  // if (houseModel) {
+  //   houseModel.visible = false;
+  // }
+});
 
-// renderer.xr.addEventListener("sessionend", () => {
-//   console.log('AR session ended');
-//   if (houseModel) {
-//     houseModel.visible = true;
-//     houseModel.position.set(0, -2, -5);
-//     houseModel.scale.set(0.2, 0.2, 0.2);
-//   }
-// });
+renderer.xr.addEventListener("sessionend", () => {
+  console.log('AR session ended');
+  document.getElementById("logo_container").style.display = "block";
+  window.location.reload();
+  // if (houseModel) {
+  //   houseModel.visible = true;
+  //   houseModel.position.set(0, -2, -5);
+  //   houseModel.scale.set(0.2, 0.2, 0.2);
+  // }
+});
 
 animate();
