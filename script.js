@@ -154,20 +154,20 @@ function animate(){
 renderer.xr.addEventListener("sessionstart", () => {
   console.log('AR session started');
   document.getElementById("logo_container").style.display = "none";
-  // if (houseModel) {
-  //   houseModel.visible = false;
-  // }
+  if (houseModel) {
+     houseModel.visible = false;
+  }
 });
 
 renderer.xr.addEventListener("sessionend", () => {
   console.log('AR session ended');
   document.getElementById("logo_container").style.display = "block";
   window.location.reload();
-  // if (houseModel) {
-  //   houseModel.visible = true;
+  if (houseModel) {
+     houseModel.visible = true;
   //   houseModel.position.set(0, -2, -5);
   //   houseModel.scale.set(0.2, 0.2, 0.2);
-  // }
+  }
 });
 
 animate();
